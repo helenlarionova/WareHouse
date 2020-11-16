@@ -20,8 +20,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.android.ecwidsclad.R
 import com.example.android.ecwidsclad.database.ProductDatabase
 import com.example.android.ecwidsclad.databinding.NewProductFragmentBinding
-import com.example.android.ecwidsclad.newproduct.NewProductFragmentArgs
-import com.example.android.ecwidsclad.newproduct.NewProductFragmentDirections
 import com.example.android.ecwidsclad.viewmodels.NewProductViewModel
 import com.example.android.ecwidsclad.viewmodels.NewProductViewModelFactory
 
@@ -91,6 +89,7 @@ class NewProductFragment : Fragment() {
 
         return binding.root
     }
+
 
     private fun saveProduct() {
         if (viewModel.productLiveData.value?.title.isNullOrBlank() ||

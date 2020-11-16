@@ -1,4 +1,4 @@
-package com.example.android.ecwidsclad.viewmodels
+package com.example.android.ecwidsclad.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
