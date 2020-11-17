@@ -16,7 +16,10 @@ class NewProductViewModel (val database: ProductDatabaseDao, val chosenProductId
     private val _productLiveData = MutableLiveData<Product>()
     val productLiveData:LiveData<Product> = _productLiveData
 
-    private var productIsEdit: Boolean = false
+    //private var productIsEdit: Boolean = false
+    private var _productIsEdit = MutableLiveData<Boolean>()
+    val productIsEdit: LiveData<Boolean> = _productIsEdit
+
 
     private val _permissionRequest = MutableLiveData<Boolean>()
     var permissionRequest:LiveData<Boolean> = _permissionRequest
@@ -29,7 +32,7 @@ class NewProductViewModel (val database: ProductDatabaseDao, val chosenProductId
             if (chosenProductId != 0L) {
                 //This is edit case
                 getChosenProduct(chosenProductId)
-                productIsEdit = true
+                _productIsEdit.value = true
             }
 
             else {
@@ -37,7 +40,7 @@ class NewProductViewModel (val database: ProductDatabaseDao, val chosenProductId
                This is because two-way databinding in the NewProductFragment is designed to
                register changes automatically, but it will need a product object to register those changes.*/
                 _productLiveData.value = Product()
-                productIsEdit = false
+                _productIsEdit.value = false
             }
         _permissionRequest.value = false
 
@@ -76,10 +79,19 @@ class NewProductViewModel (val database: ProductDatabaseDao, val chosenProductId
     fun onSave(){
         uiScope.launch {
             _productLiveData.value?.let {
-                if (!productIsEdit)
+                if (!_productIsEdit.value!!)
                     insert(it)
                 else
                     update(it)
+            }
+        }
+        _navigationToAllProducts.value = true
+    }
+
+    fun onDelete(){
+        uiScope.launch {
+            _productLiveData.value?.let {
+                delete(it)
             }
         }
         _navigationToAllProducts.value = true
@@ -97,9 +109,9 @@ class NewProductViewModel (val database: ProductDatabaseDao, val chosenProductId
         }
     }
 
-    private suspend fun clear() {
+    private suspend fun delete(product: Product) {
         withContext(Dispatchers.IO) {
-            database.clear()
+            database.delete(product)
         }
     }
 

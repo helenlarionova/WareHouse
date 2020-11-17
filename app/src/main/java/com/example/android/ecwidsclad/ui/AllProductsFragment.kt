@@ -12,7 +12,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 
 import com.example.android.ecwidsclad.R
-import com.example.android.ecwidsclad.allproducts.*
 import com.example.android.ecwidsclad.database.ProductDatabase
 import com.example.android.ecwidsclad.databinding.AllProductsFragmentBinding
 import com.example.android.ecwidsclad.viewmodels.AllProductsViewModel
