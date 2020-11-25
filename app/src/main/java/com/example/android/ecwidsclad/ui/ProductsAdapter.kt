@@ -2,6 +2,8 @@ package com.example.android.ecwidsclad.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +12,7 @@ import com.example.android.ecwidsclad.databinding.ProductItemViewBinding
 
 class ProductsAdapter (val clickListener: ProductListener) : ListAdapter<Product, ProductsAdapter.ViewHolder>(
     ProductDiffCallback()
-) {
+){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(
@@ -44,6 +46,7 @@ class ProductsAdapter (val clickListener: ProductListener) : ListAdapter<Product
         }
 
     }
+
 }
 
     class ProductDiffCallback:

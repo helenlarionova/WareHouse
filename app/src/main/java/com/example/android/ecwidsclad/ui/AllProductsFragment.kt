@@ -2,12 +2,14 @@ package com.example.android.ecwidsclad.ui
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 
@@ -17,7 +19,9 @@ import com.example.android.ecwidsclad.databinding.AllProductsFragmentBinding
 import com.example.android.ecwidsclad.viewmodels.AllProductsViewModel
 import com.example.android.ecwidsclad.viewmodels.AllProductsViewModelFactory
 
-class AllProductsFragment : Fragment() {
+class AllProductsFragment : Fragment(), SearchView.OnQueryTextListener {
+
+    lateinit var viewModel: AllProductsViewModel
 
 
     override fun onCreateView(
@@ -36,11 +40,15 @@ class AllProductsFragment : Fragment() {
                 application
             )
 
-        val viewModel = ViewModelProviders.of(this, viewModelFactory).get(AllProductsViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AllProductsViewModel::class.java)
 
         binding.allProductsViewModel = viewModel
 
         binding.setLifecycleOwner(this)
+
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        setHasOptionsMenu(true)
+
 
         binding.fab.setOnClickListener {view: View ->
             Navigation.findNavController(view).navigate(R.id.action_allProductsFragment_to_newProductFragment)
@@ -50,6 +58,7 @@ class AllProductsFragment : Fragment() {
             ProductListener { productId ->
                 viewModel.onProductItemClicked(productId)
             })
+
         binding.productsList.adapter = adapter
 
         viewModel.navigateToNewProductFragment.observe(viewLifecycleOwner, Observer {
@@ -72,6 +81,40 @@ class AllProductsFragment : Fragment() {
 
         return binding.root
     }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_all_products_list, menu)
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.setOnQueryTextListener(this)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        return when (item.itemId) {
+            R.id.action_search -> true
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        query?.let {
+            viewModel.setFilter(it)
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        query?.let {
+            viewModel.setFilter(it)
+        }
+        return true
+    }
+    
 
 
 }

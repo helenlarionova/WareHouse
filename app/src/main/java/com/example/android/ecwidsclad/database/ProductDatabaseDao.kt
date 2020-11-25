@@ -24,4 +24,7 @@ interface ProductDatabaseDao {
     @Query("SELECT * FROM products_table ORDER BY productId DESC")
     fun getAllProducts(): LiveData<List<Product>>
 
+    @Query("SELECT * from products_table WHERE title LIKE :filter ORDER BY productId")
+    fun getProductsFiltered(filter: String): LiveData<List<Product>>
+
 }
