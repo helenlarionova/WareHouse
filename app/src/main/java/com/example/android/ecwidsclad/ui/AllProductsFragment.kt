@@ -1,21 +1,19 @@
 package com.example.android.ecwidsclad.ui
 
+
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 
 import com.example.android.ecwidsclad.R
 import com.example.android.ecwidsclad.database.ProductDatabase
-import com.example.android.ecwidsclad.databinding.AllProductsFragmentBinding
 import com.example.android.ecwidsclad.viewmodels.AllProductsViewModel
 import com.example.android.ecwidsclad.viewmodels.AllProductsViewModelFactory
 
@@ -23,12 +21,18 @@ class AllProductsFragment : Fragment(), SearchView.OnQueryTextListener {
 
     lateinit var viewModel: AllProductsViewModel
 
+    var mSearchQuery: String? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: AllProductsFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.all_products_fragment, container, false)
+        if(savedInstanceState != null){
+            mSearchQuery = savedInstanceState.getString("searchQuery");
+        }
+
+        val binding: com.example.android.ecwidsclad.databinding.AllProductsFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.all_products_fragment, container, false)
 
         val application = requireNotNull(this.activity).application
 
@@ -87,6 +91,17 @@ class AllProductsFragment : Fragment(), SearchView.OnQueryTextListener {
         inflater.inflate(R.menu.menu_all_products_list, menu)
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
+
+        if(!mSearchQuery.isNullOrEmpty()){
+            searchView.setIconified(false);
+            searchItem.expandActionView()
+            searchView.setQuery(mSearchQuery, false)
+            searchView.clearFocus()
+        }else {
+            searchView.setIconifiedByDefault(false)
+            searchView.requestFocus()
+        }
+
         searchView.setOnQueryTextListener(this)
     }
 
@@ -110,11 +125,18 @@ class AllProductsFragment : Fragment(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextChange(query: String?): Boolean {
         query?.let {
+            mSearchQuery = query
             viewModel.setFilter(it)
         }
         return true
     }
-    
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString("searchQuery", mSearchQuery);
+        super.onSaveInstanceState(outState)
+    }
+
+
 
 
 }

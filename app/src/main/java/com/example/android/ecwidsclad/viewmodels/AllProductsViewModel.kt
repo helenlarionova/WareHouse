@@ -45,13 +45,6 @@ class AllProductsViewModel (database: ProductDatabaseDao, application: Applicati
         _navigateToNewProductFragment.value = null
     }
 
-    fun filter(filterString: String) {
-        products = Transformations.map(products) { it ->
-            it.filter {
-                it.title.contains(filterString)
-            }
-        }
-    }
 
 
 

@@ -1,14 +1,9 @@
 package com.example.android.ecwidsclad.utils
 
 import android.net.Uri
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LiveData
 import com.example.android.ecwidsclad.database.Product
 
 
